@@ -11,22 +11,20 @@ class PIDController:
         PID controller that auto-tunes Kp, Ki, Kd using grid search.
         The input kp, ki, kd are ignored.
         """
-        # ✅ Delay import to avoid circular import issue
         from grade import read_waypoints, simulate, grade_performance
-
-        # Simulation setup
+        
         self.dt = 0.1
         self.total_time = 179
         self.initial_speed = 0
         self.times, self.speeds = read_waypoints('waypoints.csv')
 
-        # === Tuning using nested loops (grid search) ===
+        #tuning using nested loops (grid search) ===
         best_mse = float('inf')
         best_params = (0, 0, 0)
 
-        for kp in np.arange(0.5, 3.5, 0.5):      # Test Kp from 0.5 to 3.0
-            for ki in np.arange(0.0, 0.6, 0.1):   # Test Ki from 0.0 to 0.5
-                for kd in np.arange(0.0, 1.1, 0.2):  # Test Kd from 0.0 to 1.0
+        for kp in np.arange(0.5, 3.5, 0.5):      # Test Kp from 0.5 to 3.5
+            for ki in np.arange(0.0, 0.6, 0.1):   # Test Ki from 0.0 to 0.6
+                for kd in np.arange(0.0, 1.1, 0.2):  # Test Kd from 0.0 to 1.1
                     temp_controller = PIDController._temp(kp, ki, kd)
                     sim_times, sim_speeds = simulate(
                         self.times, self.speeds,
